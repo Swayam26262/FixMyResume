@@ -8,8 +8,8 @@ from .utils import parse_resume_file
 import os
 import json
 import re
-from google import genai
-from google.genai import types
+import google.generativeai as genai
+from google.generativeai import types
 
 class ResumeUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
