@@ -5,8 +5,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView, TokenRefreshView
+    TokenObtainPairView, TokenRefreshView as BaseTokenRefreshView
 )
+from rest_framework_simplejwt.exceptions import InvalidToken
 from .serializers import (
     RegisterSerializer, OTPVerifySerializer, AnalysisHistorySerializer
 )
@@ -124,19 +125,64 @@ class OTPVerifyView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-class LogoutView(generics.GenericAPIView):
-    def post(self, request, *args, **kwargs):
-        # Implement token invalidation or session cleanup here
-        return Response(
-            {'message': 'Logged out successfully'}, 
-            status=status.HTTP_200_OK
-        )
-
 class LoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
-class TokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            access_token = response.data.pop('access')
+            refresh_token = response.data.pop('refresh')
+            response.set_cookie(
+                'access_token',
+                access_token,
+                httponly=True,
+                samesite='None',
+                secure=True
+            )
+            response.set_cookie(
+                'refresh_token',
+                refresh_token,
+                httponly=True,
+                samesite='None',
+                secure=True
+            )
+        return response
+
+class TokenRefreshView(BaseTokenRefreshView):
     permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh_token')
+        if not refresh_token:
+            return Response({'error': 'Refresh token not found in cookie.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = self.get_serializer(data={'refresh': refresh_token})
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except InvalidToken:
+            return Response({'error': 'Invalid refresh token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        response = Response(serializer.validated_data, status=status.HTTP_200_OK)
+        access_token = response.data.pop('access')
+        response.set_cookie(
+            'access_token',
+            access_token,
+            httponly=True,
+            samesite='None',
+            secure=True
+        )
+        return response
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        response = Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+        return response
 
 
 class AnalysisHistoryView(generics.ListAPIView):
