@@ -1,20 +1,23 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://fixmyresume.onrender.com/api/auth/';
+// Create a dedicated axios instance for the API
+const api = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000/api/',
+});
 
 const authService = {
   register: async (userData) => {
-    const response = await axios.post(API_URL + 'register/', userData);
+    const response = await api.post('auth/register/', userData);
     return response.data;
   },
 
   verifyOTP: async (otpData) => {
-    const response = await axios.post(API_URL + 'verify-otp/', otpData);
+    const response = await api.post('auth/verify-otp/', otpData);
     return response.data;
   },
 
   login: async (credentials) => {
-    const response = await axios.post(API_URL + 'login/', credentials);
+    const response = await api.post('auth/login/', credentials);
     if (response.data.access) {
       localStorage.setItem('user', JSON.stringify({
         access: response.data.access,
@@ -35,7 +38,7 @@ const authService = {
   refreshToken: async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user?.refresh) {
-      const response = await axios.post(API_URL + 'token/refresh/', {
+      const response = await api.post('auth/token/refresh/', {
         refresh: user.refresh
       });
       if (response.data.access) {
@@ -45,37 +48,49 @@ const authService = {
       return response.data;
     }
     return null;
-  }
+  },
+
+  getAnalysisHistory: async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const config = {};
+    if (user?.access) {
+        config.headers = {
+            Authorization: `Bearer ${user.access}`
+        };
+    }
+    const response = await api.get('auth/analysis-history/', config);
+    return response.data;
+  },
+
+  // Resume-related API methods
+  parseResume: async (formData) => {
+    const response = await api.post('parse-resume/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  analyzeResume: async (data) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const config = {};
+    if (user?.access) {
+        config.headers = {
+            Authorization: `Bearer ${user.access}`
+        };
+    }
+    const response = await api.post('analyze-resume/', data, config);
+    return response.data;
+  },
 };
 
-// Add axios interceptor for token refresh
-axios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const newToken = await authService.refreshToken();
-        if (newToken) {
-          originalRequest.headers['Authorization'] = 'Bearer ' + newToken.access;
-          return axios(originalRequest);
-        }
-      } catch (refreshError) {
-        authService.logout();
-        window.location.href = '/login';
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Add axios interceptor for adding token to requests
-axios.interceptors.request.use(
+// Add request interceptor to the dedicated instance
+api.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user?.access) {
-      config.headers['Authorization'] = 'Bearer ' + user.access;
+      config.headers['Authorization'] = `Bearer ${user.access}`;
     }
     return config;
   },
@@ -84,4 +99,29 @@ axios.interceptors.request.use(
   }
 );
 
-export default authService; 
+// Add response interceptor to the dedicated instance
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const newToken = await authService.refreshToken();
+        if (newToken && newToken.access) {
+          api.defaults.headers.common['Authorization'] = 'Bearer ' + newToken.access;
+          originalRequest.headers['Authorization'] = 'Bearer ' + newToken.access;
+          return api(originalRequest);
+        }
+      } catch (refreshError) {
+        authService.logout();
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default authService;

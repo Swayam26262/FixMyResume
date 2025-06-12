@@ -82,7 +82,7 @@ class ResumeAnalysisView(APIView):
                     {"error": "GEMINI_API_KEY not found in environment variables."},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
-            client = genai.Client(api_key=gemini_api_key)
+            genai.configure(api_key=gemini_api_key)
 
             # Construct prompt for Gemini AI
             prompt = f"""
@@ -101,14 +101,17 @@ class ResumeAnalysisView(APIView):
             - "improvement_tips": A list of actionable tips to improve the resume for this specific job description.
             """
 
-            response = client.models.generate_content(
-                model="gemini-2.0-flash",
-                config=types.GenerateContentConfig(
-                    temperature=0.7,
-                    top_p=0.95,
-                    top_k=40,
-                ),
-                contents=[prompt]
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            
+            generation_config = types.GenerationConfig(
+                temperature=0.7,
+                top_p=0.95,
+                top_k=40,
+            )
+
+            response = model.generate_content(
+                contents=[prompt],
+                generation_config=generation_config
             )
 
             # Attempt to parse the AI response as JSON

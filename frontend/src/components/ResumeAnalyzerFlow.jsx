@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, CheckCircle, AlertCircle, Target } from 'lucide-react';
-import axios from 'axios';
+import authService from '../services/authService';
 
 export default function ResumeAnalyzerFlow({ onDone, initialParsedContent = null }) {
   const [step, setStep] = useState(initialParsedContent ? 'jobDescription' : 'upload');
@@ -46,12 +46,8 @@ export default function ResumeAnalyzerFlow({ onDone, initialParsedContent = null
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/parse-resume/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setParsedResumeContent(response.data.content);
+      const response = await authService.parseResume(formData);
+      setParsedResumeContent(response.content);
       setStep('jobDescription');
     } catch (error) {
       console.error("Error parsing resume:", error.response ? error.response.data : error.message);
@@ -70,13 +66,13 @@ export default function ResumeAnalyzerFlow({ onDone, initialParsedContent = null
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/analyze-resume/`, {
+      const response = await authService.analyzeResume({
         job_description: jobDescription,
         resume_content: parsedResumeContent
       });
-      setAnalysis(response.data.analysis);
+      setAnalysis(response.analysis);
       setStep('analysis');
-      if (onDone) onDone(response.data.analysis);
+      if (onDone) onDone(response.analysis);
     } catch (err) {
       console.error("Error analyzing resume:", err.response ? err.response.data : err.message);
       const errorMessage = err.response?.data?.error || 'Failed to analyze resume. Please try again.';

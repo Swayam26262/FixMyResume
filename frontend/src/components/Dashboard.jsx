@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import ResumeAnalyzerFlow from './ResumeAnalyzerFlow';
 import AnalysisHistory from './AnalysisHistory';
 import authService from '../services/authService';
@@ -15,10 +14,8 @@ export default function Dashboard() {
       try {
         setLoading(true);
         setError('');
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}api/auth/analysis-history/`
-        );
-        setHistory(response.data);
+        const historyData = await authService.getAnalysisHistory();
+        setHistory(historyData);
       } catch (err) {
         setError('Failed to load analysis history. Please try again later.');
         console.error('Failed to fetch history:', err);

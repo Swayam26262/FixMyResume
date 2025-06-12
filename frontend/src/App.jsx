@@ -61,7 +61,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onNavigate={handleNavigate}>
                 <Dashboard onNavigate={handleNavigate} />
               </ProtectedRoute>
             }
@@ -69,7 +69,7 @@ function App() {
           <Route
             path="/linkedin-review"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onNavigate={handleNavigate}>
                 <LinkedInReviewPage onNavigate={handleNavigate} />
               </ProtectedRoute>
             }
@@ -77,7 +77,7 @@ function App() {
           <Route
             path="/resume-templates"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onNavigate={handleNavigate}>
                 <ResumeTemplatesPage onNavigate={handleNavigate} />
               </ProtectedRoute>
             }

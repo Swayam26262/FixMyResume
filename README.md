@@ -113,5 +113,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
   <p>Made with ❤️ by Swayam</p>
-  <p>© 2024 FixMyResume. All rights reserved.</p>
+  <p>© 2025 FixMyResume. All rights reserved.</p>
 </div> 

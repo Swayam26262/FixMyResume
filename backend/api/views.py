@@ -144,4 +144,8 @@ class AnalysisHistoryView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        This view should return a list of all the analysis history
+        for the currently authenticated user.
+        """
         return AnalysisHistory.objects.filter(user=self.request.user).order_by('-created_at')
