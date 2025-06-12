@@ -121,16 +121,6 @@ class OTPVerifyView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-class LogoutView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        response = Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
-        response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
-        return response
-
-
 class AnalysisHistoryView(generics.ListAPIView):
     serializer_class = AnalysisHistorySerializer
     permission_classes = [IsAuthenticated]

@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api', 
     'parser_app',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -160,47 +162,27 @@ DEFAULT_FROM_EMAIL = EMAIL_FROM
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'djangorestframework_simplejwt_cookie_samesite.authentication.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
-from rest_framework_simplejwt.settings import api_settings as jwt_settings
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_COOKIE': 'access_token',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
+    'JWT_AUTH_SAMESITE': 'None',
+    'JWT_AUTH_SECURE': True,
+}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-
-    'AUTH_TOKEN_CLASSES': ('djangorestframework_simplejwt_cookie_samesite.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-
-    'JTI_CLAIM': 'jti',
-
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-
-    # djangorestframework-simplejwt-cookie-samesite settings
-    'JWT_COOKIE_SAMESITE': 'None',
-    'JWT_COOKIE_SECURE': True,
-    'JWT_COOKIE_HTTPONLY': True,
-    'JWT_COOKIE_DOMAIN': None,
-    'JWT_COOKIE_PATH': '/',
-    'JWT_ACCESS_TOKEN_COOKIE_NAME': 'access_token',
-    'JWT_REFRESH_TOKEN_COOKIE_NAME': 'refresh_token',
 }
 
 CORS_ALLOW_CREDENTIALS = True

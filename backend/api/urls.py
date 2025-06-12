@@ -1,13 +1,9 @@
-from django.urls import path
-from django.urls import path
-from .views import RegisterView, OTPVerifyView, LogoutView, AnalysisHistoryView
-from djangorestframework_simplejwt_cookie_samesite.views import TokenObtainPairView, TokenRefreshView
+from django.urls import path, include
+from .views import RegisterView, OTPVerifyView, AnalysisHistoryView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
-    path('verify-otp/', OTPVerifyView.as_view(), name='verify-otp'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('otp/verify/', OTPVerifyView.as_view(), name='otp-verify'),
     path('analysis-history/', AnalysisHistoryView.as_view(), name='analysis-history'),
+    path('', include('dj_rest_auth.urls')),
 ]
