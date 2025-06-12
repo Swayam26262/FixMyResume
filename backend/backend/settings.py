@@ -190,6 +190,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
+    "https://fix-my-resume.vercel.app",
 ]
 
 CORS_ALLOW_HEADERS = [
