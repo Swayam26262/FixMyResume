@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'fixmyresume.onrender.com,fix-my-resume.vercel.app,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = ['fixmyresume.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -141,8 +141,9 @@ STATICFILES_DIRS = [
 ]
 
 # Add security settings
-SECURE_SSL_REDIRECT = os.getenv('DEBUG', 'False') != 'True'
-SESSION_COOKIE_SECURE = os.getenv('DEBUG', 'False') != 'True'
+# Production security settings
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
@@ -179,7 +180,7 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE': 'access_token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
     'JWT_AUTH_SAMESITE': 'None',
-    'JWT_AUTH_SECURE': os.getenv('DEBUG', 'False') != 'True',
+    'JWT_AUTH_SECURE': True,
 }
 
 SIMPLE_JWT = {
