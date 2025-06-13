@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'fixmyresume.onrender.com,fix-my-resume.vercel.app,localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -139,9 +139,9 @@ STATICFILES_DIRS = [
 ]
 
 # Add security settings
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = os.getenv('DEBUG', 'False') != 'True'
+SESSION_COOKIE_SECURE = os.getenv('DEBUG', 'False') != 'True'
+CSRF_COOKIE_SECURE = os.getenv('DEBUG', 'False') != 'True'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
