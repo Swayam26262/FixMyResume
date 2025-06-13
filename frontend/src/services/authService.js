@@ -3,6 +3,7 @@ import axios from 'axios';
 // Create a dedicated axios instance for the API
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000/api/',
+  withCredentials: true,
 });
 
 const authService = {
