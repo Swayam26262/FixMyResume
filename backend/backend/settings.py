@@ -143,7 +143,9 @@ STATICFILES_DIRS = [
 # Add security settings
 SECURE_SSL_REDIRECT = os.getenv('DEBUG', 'False') != 'True'
 SESSION_COOKIE_SECURE = os.getenv('DEBUG', 'False') != 'True'
-CSRF_COOKIE_SECURE = os.getenv('DEBUG', 'False') != 'True'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
@@ -189,12 +191,12 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:5173",
-#     "https://fix-my-resume.vercel.app",
-# ]
-CORS_ALLOW_ALL_ORIGINS = True # THIS IS FOR DEBUGGING ONLY
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://fix-my-resume.vercel.app",
+]
+# CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
