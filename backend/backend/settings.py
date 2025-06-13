@@ -1,4 +1,3 @@
-# Forcing Git to recognize changes
 """
 Django settings for backend project.
 
@@ -190,12 +189,12 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://fix-my-resume.vercel.app",
-]
-# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+#     "https://fix-my-resume.vercel.app",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True # THIS IS FOR DEBUGGING ONLY
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
