@@ -1,3 +1,4 @@
+# Forcing Git to recognize changes
 databases:
   - name: fixmyresume-db
     databaseName: fixmyresume

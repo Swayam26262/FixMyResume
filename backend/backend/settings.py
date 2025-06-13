@@ -1,3 +1,4 @@
+# Forcing Git to recognize changes
 """
 Django settings for backend project.
 
