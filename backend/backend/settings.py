@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['fixmyresume.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -52,10 +52,12 @@ INSTALLED_APPS = [
     'parser_app',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'api.middleware.HeaderLoggingMiddleware', # For debugging production headers
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -190,12 +192,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://fix-my-resume.vercel.app",
+    "http://localhost:3000",
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://fix-my-resume.vercel.app",
+    "http://localhost:3000",
 ]
 
 CORS_ALLOW_HEADERS = [
