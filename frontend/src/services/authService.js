@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a dedicated axios instance for the API
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000/api/',
+  baseURL: import.meta.env.DEV ? '/api' : import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
 
@@ -52,14 +52,8 @@ const authService = {
   },
 
   getAnalysisHistory: async () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const config = {};
-    if (user?.access) {
-        config.headers = {
-            Authorization: `Bearer ${user.access}`
-        };
-    }
-    const response = await api.get('auth/analysis-history/', config);
+    // The interceptor automatically adds the auth header
+    const response = await api.get('auth/history/');
     return response.data;
   },
 
@@ -74,14 +68,8 @@ const authService = {
   },
 
   analyzeResume: async (data) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const config = {};
-    if (user?.access) {
-        config.headers = {
-            Authorization: `Bearer ${user.access}`
-        };
-    }
-    const response = await api.post('analyze-resume/', data, config);
+    // The interceptor automatically adds the auth header
+    const response = await api.post('analyze-resume/', data);
     return response.data;
   },
 };

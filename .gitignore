@@ -1,0 +1,24 @@
+# Environment variables
+.env*
+!/.env.example
+
+# Python/Django
+__pycache__/
+*.pyc
+venv/
+env/
+
+# Node.js
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE / Editor specific
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
