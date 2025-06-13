@@ -3,8 +3,21 @@ import axios from 'axios';
 // Create a dedicated axios instance for the API
 const api = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : import.meta.env.VITE_BACKEND_URL,
-  withCredentials: true,
 });
+
+// Add a request interceptor to include the token in headers
+api.interceptors.request.use(
+  (config) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.access) {
+      config.headers['Authorization'] = `Bearer ${user.access}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const authService = {
   register: async (userData) => {
@@ -20,10 +33,7 @@ const authService = {
   login: async (credentials) => {
     const response = await api.post('auth/login/', credentials);
     if (response.data.access) {
-      localStorage.setItem('user', JSON.stringify({
-        access: response.data.access,
-        refresh: response.data.refresh
-      }));
+      localStorage.setItem('user', JSON.stringify(response.data));
     }
     return response.data;
   },
