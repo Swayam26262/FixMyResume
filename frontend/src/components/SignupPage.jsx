@@ -13,6 +13,7 @@ export default function SignupPage({ onNavigate, onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(''); // New state for success messages
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +26,7 @@ export default function SignupPage({ onNavigate, onLogin }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess(''); // Clear previous messages
     
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -35,11 +37,25 @@ export default function SignupPage({ onNavigate, onLogin }) {
     try {
       await authService.register({
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        password2: formData.password
       });
       setStep('verify');
+      setSuccess('OTP sent successfully! Please check your email.');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed');
+      let errorMessage = 'Registration failed. Please try again.';
+      if (err.response && err.response.data) {
+          const errors = err.response.data;
+          if (errors.detail) {
+              errorMessage = errors.detail;
+          } else {
+              const errorKey = Object.keys(errors)[0];
+              if (errorKey) {
+                  errorMessage = `${errorKey.charAt(0).toUpperCase() + errorKey.slice(1)}: ${errors[errorKey][0]}`;
+              }
+          }
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -48,14 +64,15 @@ export default function SignupPage({ onNavigate, onLogin }) {
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess(''); // Clear previous messages
     setIsLoading(true);
 
     try {
-      const response = await authService.verifyOTP({
+      await authService.verifyOTP({
         email: formData.email,
         code: otp
       });
-      setError('Registration successful! Please login with your credentials.');
+      setSuccess('Registration successful! Please login with your credentials.');
       setTimeout(() => {
         onNavigate('login');
       }, 2000);
@@ -146,7 +163,7 @@ export default function SignupPage({ onNavigate, onLogin }) {
           <>
             Create Account
             <ArrowRight className="inline-block ml-2 h-5 w-5" />
-          </>
+          </> 
         )}
       </button>
     </form>
@@ -209,6 +226,12 @@ export default function SignupPage({ onNavigate, onLogin }) {
           {error && (
             <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+              {success}
             </div>
           )}
 
