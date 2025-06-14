@@ -20,47 +20,48 @@ class RegisterView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
-        
-        if User.objects.filter(email=email).exists():
-            return Response(
-                {'error': 'Email already exists'}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
+
+        # First, validate the input using the serializer
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         try:
-            # Generate OTP
-            otp = generate_otp()
-            
-            # Create user (inactive)
-            user = User.objects.create_user(
-                email=email,
-                password=password
-            )
+            user, created = User.objects.get_or_create(email=email)
+
+            if not created and user.is_active:
+                return Response(
+                    {'error': 'Email already registered and verified'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Update password and ensure user is inactive
+            user.set_password(password)
             user.is_active = False
             user.save()
+
+            # Remove any old OTPs for this user
+            EmailOTP.objects.filter(user=user).delete()
+
+            # Generate and send a new OTP
+            otp = generate_otp()
+            EmailOTP.objects.create(user=user, code=otp, purpose='registration')
             
-            # Create OTP record
-            EmailOTP.objects.create(user=user, code=otp)
-            
-            # Send OTP via email
             if send_otp_email(email, otp):
+                message = 'OTP sent to your email'
+                if not created:
+                    message = 'It looks like you already signed up but didn’t verify your email. A new OTP has been sent to your email address.'
                 return Response(
-                    {'message': 'OTP sent to your email'}, 
+                    {'message': message},
                     status=status.HTTP_200_OK
                 )
             else:
-                # If email sending fails, delete the user and OTP
-                user.delete()
                 return Response(
-                    {'error': 'Failed to send OTP email'}, 
+                    {'error': 'Failed to send OTP email'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
-                
+
         except Exception as e:
-            return Response(
-                {'error': str(e)}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class OTPVerifyView(generics.CreateAPIView):
     serializer_class = OTPVerifySerializer
