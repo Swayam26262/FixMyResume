@@ -66,7 +66,9 @@ class EmailOTP(models.Model):
     expires_at = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
-        if self.expires_at == timezone.now():
+        # When an OTP is created, its 'created_at' is not set until the first save.
+        # This is a reliable way to check if the instance is new.
+        if not self.created_at:
             self.expires_at = timezone.now() + timedelta(minutes=10)
         super().save(*args, **kwargs)
 
