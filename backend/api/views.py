@@ -18,12 +18,11 @@ class RegisterView(generics.CreateAPIView):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        # First, validate the input using the serializer
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        email = validated_data.get('email')
+        password = validated_data.get('password')
 
         try:
             user, created = User.objects.get_or_create(email=email)
@@ -34,18 +33,17 @@ class RegisterView(generics.CreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Update password and ensure user is inactive
+            # Update password and deactivate again (just in case)
             user.set_password(password)
             user.is_active = False
             user.save()
 
-            # Remove any old OTPs for this user
+            # Remove old OTPs
             EmailOTP.objects.filter(user=user).delete()
 
-            # Generate and send a new OTP
+            # Generate and send OTP
             otp = generate_otp()
             EmailOTP.objects.create(user=user, code=otp, purpose='registration')
-            
             if send_otp_email(email, otp):
                 message = 'OTP sent to your email'
                 if not created:
