@@ -9,7 +9,7 @@ export default function Header({ currentPage, onNavigate, isLoggedIn, onLogout }
   const navigate = useNavigate();
 
   const productItems = [
-    { id: '/dashboard', label: 'Resume Analysis' },
+    { id: 'dashboard', label: 'Resume Analysis' },
     { id: 'linkedin-review', label: 'LinkedIn Review' },
     { id: 'resume-templates', label: 'Resume Templates' }
   ];

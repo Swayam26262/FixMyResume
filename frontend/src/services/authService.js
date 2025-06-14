@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create a dedicated axios instance for the API
 const api = axios.create({
   // Abandoning Vite proxy for local dev. Connecting directly.
-  baseURL: import.meta.env.DEV ? '/api' : import.meta.env.VITE_BACKEND_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:8000/api/",
 });
 
 // Add a request interceptor to include the token in headers

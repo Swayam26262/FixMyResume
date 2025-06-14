@@ -1,8 +1,3 @@
-databases:
-  - name: fixmyresume-db
-    databaseName: fixmyresume
-    user: fixmyresume_user
-
 services:
   - type: web
     name: fixmyresume-backend
@@ -12,10 +7,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      - key: DATABASE_URL
-        fromDatabase:
-          name: fixmyresume-db
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY

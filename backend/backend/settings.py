@@ -48,12 +48,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'api', 
+    'api',
     'parser_app',
     'rest_framework.authtoken',
     'dj_rest_auth',
-    'sslserver',
 ]
+
+# Add development-only apps
+if DEBUG:
+    INSTALLED_APPS.append('sslserver')
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -143,10 +146,11 @@ STATICFILES_DIRS = [
 ]
 
 # Add security settings
-# Production security settings
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Security settings: Enforce SSL in production, but not in development
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
