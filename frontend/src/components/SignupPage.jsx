@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import authService from '../services/authService';
+import { Link } from 'react-router-dom';
 
 export default function SignupPage({ onNavigate, onLogin }) {
   const [step, setStep] = useState('register'); // 'register' or 'verify'
@@ -14,6 +15,7 @@ export default function SignupPage({ onNavigate, onLogin }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(''); // New state for success messages
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +29,11 @@ export default function SignupPage({ onNavigate, onLogin }) {
     e.preventDefault();
     setError('');
     setSuccess(''); // Clear previous messages
+
+    if (!agreedToTerms) {
+      setError('You must agree to the Terms of Service and Privacy Policy.');
+      return;
+    }
     
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -146,6 +153,34 @@ export default function SignupPage({ onNavigate, onLogin }) {
             className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
             placeholder="Confirm your password"
           />
+        </div>
+      </div>
+
+      <div className="pt-2 pb-4">
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="terms"
+              name="terms"
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="terms" className="text-gray-700">
+              I agree to the{' '}
+              <Link to="/terms-of-service" target="_blank" rel="noopener noreferrer" className="font-medium text-purple-600 hover:underline">
+                Terms of Service
+              </Link>
+              {' and '}
+              <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer" className="font-medium text-purple-600 hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </label>
+          </div>
         </div>
       </div>
 

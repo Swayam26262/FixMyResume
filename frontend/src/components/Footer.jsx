@@ -3,7 +3,7 @@ import { FileText, Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram }
 
 export default function Footer({ onNavigate }) {
   const productLinks = [
-    { id: 'resume-scorer', label: 'Resume Scorer' },
+    { id: 'dashboard', label: 'Resume Scorer' },
     { id: 'linkedin-review', label: 'LinkedIn Review' },
     { id: 'resume-templates', label: 'Resume Templates' },
     { id: 'features', label: 'All Features' }
@@ -42,15 +42,15 @@ export default function Footer({ onNavigate }) {
             <div className="space-y-2">
               <div className="flex items-center text-gray-400 hover:text-white transition-colors group">
                 <Mail className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                <span>support@fixmyresume.com</span>
+                <span>vflair.service@gmail.com</span>
               </div>
               <div className="flex items-center text-gray-400 hover:text-white transition-colors group">
                 <Phone className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 7558384318</span>
               </div>
               <div className="flex items-center text-gray-400 hover:text-white transition-colors group">
                 <MapPin className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                <span>San Francisco, CA</span>
+                <span>Maharashtra, India</span>
               </div>
             </div>
           </div>
@@ -107,44 +107,44 @@ export default function Footer({ onNavigate }) {
           </div>
         </div>
 
-        {/* Social Media & Newsletter */}
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-6 mb-4 md:mb-0 animate-fadeInLeft">
-              <span className="text-gray-400">Follow us:</span>
-              <div className="flex space-x-4">
-                {[
-                  { icon: <Twitter className="h-5 w-5" />, href: "#" },
-                  { icon: <Linkedin className="h-5 w-5" />, href: "#" },
-                  { icon: <Facebook className="h-5 w-5" />, href: "#" },
-                  { icon: <Instagram className="h-5 w-5" />, href: "#" }
-                ].map((social, index) => (
-                  <a 
-                    key={index}
-                    href={social.href} 
-                    className={`text-gray-400 hover:text-white transition-all duration-200 hover:scale-110 animate-scaleIn stagger-${index + 1}`}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
+          {/* Social Media & Newsletter
+          <div className="border-t border-gray-800 mt-12 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="flex items-center space-x-6 mb-4 md:mb-0 animate-fadeInLeft">
+                <span className="text-gray-400">Follow us:</span>
+                <div className="flex space-x-4">
+                  {[
+                    { icon: <Twitter className="h-5 w-5" />, href: "#" },
+                    { icon: <Linkedin className="h-5 w-5" />, href: "#" },
+                    { icon: <Facebook className="h-5 w-5" />, href: "#" },
+                    { icon: <Instagram className="h-5 w-5" />, href: "#" }
+                  ].map((social, index) => (
+                    <a 
+                      key={index}
+                      href={social.href} 
+                      className={`text-gray-400 hover:text-white transition-all duration-200 hover:scale-110 animate-scaleIn stagger-${index + 1}`}
+                    >
+                      {social.icon}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center space-x-4 animate-fadeInRight">
-              <span className="text-gray-400">Stay updated:</span>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-gray-800 text-white px-4 py-2 rounded-l-lg border border-gray-700 focus:outline-none focus:border-blue-600 transition-colors"
-                />
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-r-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 hover:scale-105">
-                  Subscribe
-                </button>
+              <div className="flex items-center space-x-4 animate-fadeInRight">
+                <span className="text-gray-400">Stay updated:</span>
+                <div className="flex">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="bg-gray-800 text-white px-4 py-2 rounded-l-lg border border-gray-700 focus:outline-none focus:border-blue-600 transition-colors"
+                  />
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-r-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 hover:scale-105">
+                    Subscribe
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </div> */}
 
         {/* Copyright */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 animate-fadeInUp">

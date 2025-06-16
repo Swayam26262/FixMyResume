@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Download, CheckCircle, BarChart3, FileText, Users, Award, Zap, TrendingUp } from 'lucide-react';
 import authService from '../services/authService';
 
@@ -11,6 +12,45 @@ export default function HomePage({ onNavigate }) {
       onNavigate('signup');
     }
   };
+
+  const features = [
+    {
+      icon: Award,
+      title: "AI Resume Scoring",
+      description: "Get instant feedback with detailed scoring across impact, brevity, style, and more.",
+      color: "from-blue-500 to-indigo-500",
+    },
+    {
+      icon: BarChart3,
+      title: "LinkedIn Optimization",
+      description: "Optimize your LinkedIn profile to attract more recruiters and opportunities.",
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      icon: TrendingUp,
+      title: "Industry Insights",
+      description: "Get tailored recommendations based on your industry and target roles.",
+      color: "from-purple-500 to-pink-500",
+    },
+    {
+      icon: Users,
+      title: "Recruiter Insights",
+      description: "Built by top recruiters from Google, Microsoft, and other leading companies.",
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      icon: Zap,
+      title: "Instant Analysis",
+      description: "Get results in seconds, not days. Upload and receive feedback immediately.",
+      color: "from-teal-500 to-cyan-500",
+    },
+    {
+      icon: CheckCircle,
+      title: "Actionable Tips",
+      description: "Receive specific, actionable recommendations to improve your resume score.",
+      color: "from-violet-500 to-purple-500",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -73,90 +113,64 @@ export default function HomePage({ onNavigate }) {
             </div>
             
             {/* Right Content - Score Card */}
-            <div className="relative animate-fadeInRight">
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 hover-lift">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Resume Score</h3>
-                  <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium animate-pulse">
-                    Excellent
-                  </span>
-                </div>
-                
-                {/* Circular Progress */}
-                <div className="flex justify-center mb-6">
-                  <div className="relative w-32 h-32">
-                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="50"
-                        stroke="#e5e7eb"
-                        strokeWidth="8"
-                        fill="none"
-                      />
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="50"
-                        stroke="url(#gradient)"
-                        strokeWidth="8"
-                        fill="none"
-                        strokeDasharray={`${92 * 3.14159} ${100 * 3.14159}`}
-                        strokeLinecap="round"
-                        className="animate-pulse"
-                      />
-                      <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#10b981" />
-                          <stop offset="100%" stopColor="#059669" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
+            <div className="relative animate-fade-in-right">
+              <div className="relative bg-white rounded-2xl shadow-2xl p-8 transform rotate-1 hover:rotate-0 transition-all duration-500 hover:scale-105 group">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">Resume Score</h3>
+                    <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold animate-pulse-subtle">Excellent</span>
+                  </div>
+
+                  <div className="relative w-32 h-32 mx-auto">
+                    <div className="absolute inset-0 rounded-full bg-conic-gradient from-green-400 via-green-100 to-green-400 animate-spin-slow"></div>
+                    <div className="absolute inset-2 rounded-full bg-white"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center animate-scaleIn">
-                        <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">92</div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-green-600 animate-count-up">92</div>
                         <div className="text-sm text-gray-500">out of 100</div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Score Breakdown */}
-                <div className="space-y-4">
-                  {[
-                    { label: 'Impact', score: 95, color: 'from-blue-500 to-blue-600' },
-                    { label: 'Brevity', score: 78, color: 'from-yellow-500 to-yellow-600' },
-                    { label: 'Style', score: 100, color: 'from-green-500 to-green-600' }
-                  ].map((item, index) => (
-                    <div key={item.label} className={`animate-fadeInUp stagger-${index + 1}`}>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-700">{item.label}</span>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-2 bg-gradient-to-r ${item.color} rounded-full transition-all duration-1000 ease-out`}
-                              style={{ width: `${item.score}%` }}
-                            ></div>
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">{item.score}/100</span>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Impact</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-4/5 h-2 bg-blue-500 rounded-full animate-progress-fill"></div>
                         </div>
+                        <span className="text-sm text-gray-600">95/100</span>
                       </div>
                     </div>
-                  ))}
-                </div>
-                
-                {/* Achievements */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <div className="space-y-2">
-                    {[
-                      'Strong action verbs',
-                      'Quantified achievements'
-                    ].map((achievement, index) => (
-                      <div key={achievement} className={`flex items-center text-green-600 animate-fadeInLeft stagger-${index + 1}`}>
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">{achievement}</span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Brevity</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-3/5 h-2 bg-yellow-500 rounded-full animate-progress-fill animation-delay-200"></div>
+                        </div>
+                        <span className="text-sm text-gray-600">78/100</span>
                       </div>
-                    ))}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Style</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-green-500 rounded-full animate-progress-fill animation-delay-400"></div>
+                        </div>
+                        <span className="text-sm text-gray-600">100/100</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t">
+                    <div className="flex items-center space-x-2 text-green-600 animate-fade-in-up animation-delay-600">
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="text-sm">Strong action verbs</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-green-600 mt-2 animate-fade-in-up animation-delay-800">
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="text-sm">Quantified achievements</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -166,86 +180,35 @@ export default function HomePage({ onNavigate }) {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fadeInUp">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-medium mb-4">
-              Features
-            </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything you need to succeed
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our AI-powered platform provides comprehensive analysis and actionable insights 
-              to optimize your resume and LinkedIn profile.
+      <section id="features" className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center space-y-4 mb-16 animate-fade-in-up">
+            <div className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">Features</div>
+            <h2 className="text-4xl font-bold">Everything you need to succeed</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Our AI-powered platform provides comprehensive analysis and actionable insights to optimize your resume
+              and LinkedIn profile.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <BarChart3 className="h-8 w-8 text-blue-600" />,
-                title: "Resume Scoring",
-                description: "Get an instant score based on recruiter feedback and industry standards",
-                gradient: "from-blue-500 to-blue-600"
-              },
-              {
-                icon: <FileText className="h-8 w-8 text-purple-600" />,
-                title: "ATS Optimization",
-                description: "Ensure your resume passes Applicant Tracking Systems with our analysis",
-                gradient: "from-purple-500 to-purple-600"
-              },
-              {
-                icon: <Users className="h-8 w-8 text-green-600" />,
-                title: "LinkedIn Review",
-                description: "Optimize your LinkedIn profile to attract more recruiters and opportunities",
-                gradient: "from-green-500 to-green-600"
-              },
-              {
-                icon: <Award className="h-8 w-8 text-yellow-600" />,
-                title: "Industry Insights",
-                description: "Get tailored recommendations based on your target industry and role",
-                gradient: "from-yellow-500 to-yellow-600"
-              },
-              {
-                icon: <Zap className="h-8 w-8 text-pink-600" />,
-                title: "Real-time Feedback",
-                description: "Receive instant suggestions as you make changes to your resume",
-                gradient: "from-pink-500 to-pink-600"
-              },
-              {
-                icon: <TrendingUp className="h-8 w-8 text-indigo-600" />,
-                title: "Expert Templates",
-                description: "Access professionally designed templates that recruiters love",
-                gradient: "from-indigo-500 to-indigo-600"
-              }
-            ].map((feature, index) => (
-              <div key={index} className={`text-center p-6 rounded-xl hover:bg-gray-50 transition-all duration-300 hover-lift animate-fadeInUp stagger-${index + 1} group`}>
-                <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "2M+", label: "Resumes Analyzed", icon: <FileText className="h-8 w-8 mx-auto mb-2" /> },
-              { number: "89%", label: "Interview Rate Increase", icon: <TrendingUp className="h-8 w-8 mx-auto mb-2" /> },
-              { number: "4.9/5", label: "User Rating", icon: <Star className="h-8 w-8 mx-auto mb-2" /> },
-              { number: "50+", label: "Industries Covered", icon: <Award className="h-8 w-8 mx-auto mb-2" /> }
-            ].map((stat, index) => (
-              <div key={index} className={`animate-fadeInUp stagger-${index + 1} hover-scale`}>
-                <div className="text-white/80 mb-2">{stat.icon}</div>
-                <div className="text-4xl font-bold mb-2">{stat.number}</div>
-                <div className="text-blue-100">{stat.label}</div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="p-6 hover:shadow-lg transition-all duration-500 border-0 shadow-md group animate-fade-in-up hover:scale-105 rounded-xl"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="p-0 space-y-4">
+                  <div
+                    className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}
+                  >
+                    <feature.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold group-hover:text-blue-600 transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -253,20 +216,36 @@ export default function HomePage({ onNavigate }) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fadeInUp">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Ready to land your dream job?
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Join thousands of job seekers who have improved their resumes and landed their dream jobs.
-          </p>
-          <button
-            onClick={handleActionClick}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-          >
-            {authService.getCurrentUser() ? 'Go to Dashboard' : 'Get Started Free'}
-          </button>
+      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-indigo-600/90"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute top-32 right-20 w-16 h-16 bg-white/10 rounded-full animate-float animation-delay-1000"></div>
+          <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-float animation-delay-2000"></div>
+        </div>
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <div className="space-y-8 text-white animate-fade-in-up">
+            <h2 className="text-4xl lg:text-5xl font-bold">Ready to land your dream job?</h2>
+            <p className="text-xl opacity-90 max-w-2xl mx-auto">
+              Join over 2 million professionals who have improved their resumes and landed better opportunities with
+              FixMyResume.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/signup">
+                <button
+                  className="bg-white text-blue-600 hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-xl group px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center"
+                >
+                  Start Free Analysis
+                  <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+              </Link>
+              <button
+                className="border-white text-white hover:bg-white hover:text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl px-8 py-4 rounded-lg font-semibold text-lg border-2"
+              >
+                View Sample Report
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
 import Footer from './components/Footer';
@@ -7,7 +7,6 @@ import FeaturesPage from './components/FeaturesPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import Dashboard from './components/Dashboard';
-
 import LinkedInReviewPage from './components/LinkedInReviewPage';
 import ResumeTemplatesPage from './components/ResumeTemplatesPage';
 import AboutPage from './components/AboutPage';
@@ -15,8 +14,10 @@ import ContactPage from './components/ContactPage';
 import PricingPage from './components/PricingPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import authService from './services/authService';
-
-import { useNavigate } from 'react-router-dom';
+import HelpCenterPage from './components/HelpCenterPage';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
+import TermsOfServicePage from './components/TermsOfServicePage';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -30,7 +31,6 @@ function App() {
 
   const handleNavigate = (page) => {
     setCurrentPage(page);
-    // If page starts with '/', treat as path, else build path
     const path = page.startsWith('/') ? page : `/${page}`;
     navigate(path);
   };
@@ -44,6 +44,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ScrollToTop />
       <Header 
         currentPage={currentPage}
         onNavigate={handleNavigate}
@@ -58,6 +59,9 @@ function App() {
           <Route path="/pricing" element={<PricingPage onNavigate={handleNavigate} />} />
           <Route path="/about" element={<AboutPage onNavigate={handleNavigate} />} />
           <Route path="/contact" element={<ContactPage onNavigate={handleNavigate} />} />
+          <Route path="/help-center" element={<HelpCenterPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route
             path="/dashboard"
             element={

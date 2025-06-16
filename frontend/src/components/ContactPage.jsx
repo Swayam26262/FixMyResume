@@ -1,33 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import { Mail, Phone, MapPin, Send, MessageCircle, Clock, CheckCircle } from 'lucide-react';
 
 export default function ContactPage({ onNavigate }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [state, handleSubmit] = useForm("mgvyynbl");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setIsSubmitted(false);
-    }, 3000);
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  if (state.succeeded) {
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-100 text-center max-w-lg w-full animate-scaleIn">
+                <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4 animate-bounce" />
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">Message Sent!</h3>
+                <p className="text-gray-700">Thank you for reaching out. We'll get back to you as soon as possible.</p>
+            </div>
+        </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -57,25 +45,25 @@ export default function ContactPage({ onNavigate }) {
                 {
                   icon: <Mail className="h-6 w-6 text-blue-600" />,
                   title: "Email Us",
-                  content: "support@fixmyresume.com",
+                  content: "vflair.service@gmail.com",
                   bgColor: "bg-blue-100"
                 },
                 {
                   icon: <Phone className="h-6 w-6 text-green-600" />,
                   title: "Call Us",
-                  content: "+1 (555) 123-4567",
+                  content: "+91 7558384318",
                   bgColor: "bg-green-100"
                 },
                 {
                   icon: <MapPin className="h-6 w-6 text-purple-600" />,
-                  title: "Visit Us",
-                  content: "123 Career Street, Success City, SC 12345",
+                  title: "Location",
+                  content: "Maharashtra, India",
                   bgColor: "bg-purple-100"
                 },
                 {
                   icon: <Clock className="h-6 w-6 text-orange-600" />,
                   title: "Business Hours",
-                  content: "Mon-Fri: 9AM-6PM EST",
+                  content: "Mon-Fri: 9AM-6PM IST",
                   bgColor: "bg-orange-100"
                 }
               ].map((item, index) => (
@@ -120,88 +108,97 @@ export default function ContactPage({ onNavigate }) {
           <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-100 hover-lift animate-fadeInRight">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
             
-            {isSubmitted ? (
-              <div className="text-center py-12 animate-scaleIn">
-                <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4 animate-bounce" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Message Sent!</h3>
-                <p className="text-gray-600">Thank you for reaching out. We'll get back to you within 24 hours.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="animate-fadeInUp stagger-1">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div className="animate-fadeInUp stagger-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="animate-fadeInUp stagger-3">
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="animate-fadeInUp stagger-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    Full Name
                   </label>
                   <input
                     type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
+                    id="name"
+                    name="name"
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
-                    placeholder="What's this about?"
+                    placeholder="Your full name"
+                  />
+                  <ValidationError 
+                    prefix="Name" 
+                    field="name"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
-                <div className="animate-fadeInUp stagger-4">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
+                <div className="animate-fadeInUp stagger-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
                   </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
                     required
-                    rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none hover:border-gray-400"
-                    placeholder="Tell us how we can help you..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+                    placeholder="your@email.com"
+                  />
+                  <ValidationError 
+                    prefix="Email" 
+                    field="email"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
                   />
                 </div>
+              </div>
 
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover-lift animate-fadeInUp stagger-5 group"
-                >
-                  <Send className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
-                  <span>Send Message</span>
-                </button>
-              </form>
-            )}
+              <div className="animate-fadeInUp stagger-3">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+                  placeholder="What's this about?"
+                />
+                <ValidationError 
+                  prefix="Subject" 
+                  field="subject"
+                  errors={state.errors}
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="animate-fadeInUp stagger-4">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={6}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none hover:border-gray-400"
+                  placeholder="Tell us how we can help you..."
+                />
+                <ValidationError 
+                  prefix="Message" 
+                  field="message"
+                  errors={state.errors}
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={state.submitting}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover-lift animate-fadeInUp stagger-5 group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Send className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                <span>{state.submitting ? 'Sending...' : 'Send Message'}</span>
+              </button>
+            </form>
 
             <div className="mt-6 p-4 bg-blue-50 rounded-lg animate-fadeInUp stagger-6">
               <p className="text-sm text-blue-800">
@@ -213,4 +210,4 @@ export default function ContactPage({ onNavigate }) {
       </div>
     </div>
   );
-} 
+}
