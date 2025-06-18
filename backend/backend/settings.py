@@ -187,6 +187,7 @@ REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': False,
     'TOKEN_MODEL': None,
+    'LOGIN_SERIALIZER': 'api.serializers.LoginSerializer',
 }
 
 SIMPLE_JWT = {
@@ -225,3 +226,7 @@ CORS_ALLOW_HEADERS = [
 ]
 # Custom user model
 AUTH_USER_MODEL = 'api.User'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
