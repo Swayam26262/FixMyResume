@@ -4,8 +4,9 @@ from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
-    RegisterSerializer, OTPVerifySerializer, AnalysisHistorySerializer
+    RegisterSerializer, OTPVerifySerializer, AnalysisHistorySerializer, UserSerializer
 )
 from .models import EmailOTP, User, AnalysisHistory
 from .utils import generate_otp, send_otp_email
@@ -109,10 +110,18 @@ class OTPVerifyView(generics.CreateAPIView):
                 is_used=False
             ).delete()
             
-            return Response(
-                {'message': 'Registration successful'}, 
-                status=status.HTTP_201_CREATED
-            )
+            # Generate tokens
+            refresh = RefreshToken.for_user(user)
+            
+            # Serialize user data
+            user_serializer = UserSerializer(user)
+
+            return Response({
+                'message': 'Registration successful',
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user': user_serializer.data
+            }, status=status.HTTP_201_CREATED)
             
         except User.DoesNotExist:
             return Response(

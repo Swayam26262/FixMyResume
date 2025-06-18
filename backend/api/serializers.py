@@ -6,6 +6,11 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email']
+
 # 5.1 Registration serializer
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField()

@@ -54,8 +54,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'parser_app',
-    'rest_framework.authtoken',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 # Add development-only apps
@@ -185,6 +185,8 @@ REST_FRAMEWORK = {
 
 REST_AUTH = {
     'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': False,
+    'TOKEN_MODEL': None,
 }
 
 SIMPLE_JWT = {

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Download, Eye, Star, Filter, Search } from 'lucide-react';
+import ResumeEditor from './resume/ResumeEditor';
 
 export default function ResumeTemplatesPage({ onNavigate }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   const categories = [
     { id: 'all', label: 'All Templates' },
@@ -21,6 +23,7 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'modern',
       rating: 4.9,
       downloads: 15420,
+      image: '/images/modern-professional.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: false,
       description: 'Clean, modern design perfect for tech and creative industries'
@@ -31,6 +34,7 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'executive',
       rating: 4.8,
       downloads: 12350,
+      image: '/images/executive-classic.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: true,
       description: 'Sophisticated template for senior-level positions'
@@ -41,6 +45,7 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'creative',
       rating: 4.7,
       downloads: 9870,
+      image: '/images/creative-portfolio.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: true,
       description: 'Eye-catching design for designers and creative professionals'
@@ -51,6 +56,7 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'professional',
       rating: 4.9,
       downloads: 18920,
+      image: '/images/professional-standard.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: false,
       description: 'Traditional format suitable for all industries'
@@ -61,6 +67,7 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'entry-level',
       rating: 4.6,
       downloads: 7650,
+      image: '/images/fresh-graduate.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: false,
       description: 'Perfect for new graduates and entry-level positions'
@@ -71,9 +78,43 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       category: 'modern',
       rating: 4.8,
       downloads: 11240,
+      image: '/images/minimalist-pro.png',
       preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
       isPremium: true,
       description: 'Clean, minimal design that focuses on content'
+    },
+    {
+      id: 7,
+      name: 'Classic CV',
+      category: 'traditional',
+      rating: 4.5,
+      downloads: 8200,
+      image: '/images/classic-cv.png',
+      preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
+      isPremium: false,
+      description: 'A timeless, traditional resume format suitable for any industry.'
+    },
+    {
+      id: 8,
+      name: 'Blue Modern',
+      category: 'modern',
+      rating: 4.8,
+      downloads: 13500,
+      image: '/images/blue-modern.png',
+      preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
+      isPremium: true,
+      description: 'A stylish, modern resume with a professional blue sidebar.'
+    },
+    {
+      id: 9,
+      name: 'Minimalist Gray',
+      category: 'minimalist',
+      rating: 4.7,
+      downloads: 9800,
+      image: '/images/minimalist-gray.png',
+      preview: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400',
+      isPremium: false,
+      description: 'A clean, minimalist design with a focus on typography and readability.'
     }
   ];
 
@@ -83,6 +124,10 @@ export default function ResumeTemplatesPage({ onNavigate }) {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  if (selectedTemplate) {
+    return <ResumeEditor template={selectedTemplate} onBack={() => setSelectedTemplate(null)} />;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -97,104 +142,77 @@ export default function ResumeTemplatesPage({ onNavigate }) {
             Created by experts and loved by recruiters.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => onNavigate('signup')}
+            <a
+              href="#templates"
               className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
               Browse All Templates
-            </button>
-            <button className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              See Free Templates
+            </a>
+            <button
+              onClick={() => onNavigate('analyzer')}
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors border border-gray-200"
+            >
+              Analyze My Resume
             </button>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
+      {/* Templates Gallery */}
+      <section id="templates" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "50+", label: "Professional Templates" },
-              { number: "500K+", label: "Downloads" },
-              { number: "98%", label: "ATS Compatible" },
-              { number: "4.8/5", label: "Average Rating" }
-            ].map((stat, index) => (
-              <div key={index}>
-                <div className="text-3xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Filters and Search */}
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-            {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search templates..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Category Filter */}
-            <div className="flex items-center space-x-2">
-              <Filter className="h-5 w-5 text-gray-400" />
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
+          {/* Filter and Search UI */}
+          <div className="mb-12">
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+              <div className="flex bg-gray-100 p-1 rounded-lg items-center">
+                {categories.map(category => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       selectedCategory === category.id
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-100'
+                        ? 'bg-white text-blue-600 shadow'
+                        : 'text-gray-600 hover:bg-gray-200'
                     }`}
                   >
                     {category.label}
                   </button>
                 ))}
               </div>
+              <div className="relative w-full md:w-auto">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search templates..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full md:w-64 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Templates Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Template Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTemplates.map((template) => (
-              <div key={template.id} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow">
-                {/* Template Preview */}
+              <div key={template.id} className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 group">
                 <div className="relative">
-                  <img
-                    src={template.preview}
-                    alt={template.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  {template.isPremium && (
-                    <div className="absolute top-4 right-4 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                      Premium
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all flex items-center justify-center opacity-0 hover:opacity-100">
-                    <button className="bg-white text-gray-900 px-4 py-2 rounded-lg font-medium flex items-center">
-                      <Eye className="h-4 w-4 mr-2" />
-                      Preview
+                  <img src={template.preview} alt={template.name} className="w-full h-56 object-cover"/>
+                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button 
+                      onClick={() => setSelectedTemplate(template)}
+                      className="bg-white text-gray-900 px-6 py-2 rounded-lg font-semibold flex items-center"
+                    >
+                      <Eye className="h-5 w-5 mr-2" />
+                      Preview & Edit
                     </button>
                   </div>
+                  {template.isPremium && (
+                    <div className="absolute top-2 right-2 bg-yellow-400 text-gray-900 px-2 py-1 text-xs font-bold rounded">
+                      PREMIUM
+                    </div>
+                  )}
                 </div>
-
-                {/* Template Info */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-lg font-semibold text-gray-900">{template.name}</h3>
@@ -206,13 +224,19 @@ export default function ResumeTemplatesPage({ onNavigate }) {
                   
                   <p className="text-gray-600 text-sm mb-4">{template.description}</p>
                   
+                  <div className="bg-gray-200 h-64 rounded-t-lg flex items-center justify-center overflow-hidden">
+                    <img src={template.image} alt={`${template.name} preview`} className="w-full h-full object-cover object-top" />
+                  </div>
+                  
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-500">
                       {template.downloads.toLocaleString()} downloads
                     </div>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center">
-                      <Download className="h-4 w-4 mr-2" />
-                      {template.isPremium ? 'Get Premium' : 'Download'}
+                    <button 
+                      onClick={() => setSelectedTemplate(template)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center"
+                    >
+                      Use Template
                     </button>
                   </div>
                 </div>
@@ -292,4 +316,4 @@ export default function ResumeTemplatesPage({ onNavigate }) {
       </section>
     </div>
   );
-} 
+}
